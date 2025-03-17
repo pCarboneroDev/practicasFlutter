@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      //home: HomeScreen()
-      home: CounterScreen()
+      home: HomeScreen()
+      //home: CounterScreen()
     );
   }
 }
