@@ -34,8 +34,7 @@ class _CounterScreenState extends State<CounterScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 50,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // boton de restar
           FloatingActionButton(
