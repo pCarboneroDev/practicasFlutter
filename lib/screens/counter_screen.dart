@@ -11,6 +11,21 @@ class CounterScreen extends StatefulWidget{
 class _CounterScreenState extends State<CounterScreen> {
   int clicks = 0;
 
+    void increaseClicks(){
+      clicks++;
+      setState(() {});
+    }
+
+    void decreaseClicks(){
+      clicks--;
+      setState(() {});
+    }
+
+    void resetClicks(){
+      clicks = 0;
+      setState(() {});
+    }
+
   @override
   Widget build(BuildContext context) {
     const fontSize35 = const TextStyle(fontSize: 35);
@@ -33,40 +48,53 @@ class _CounterScreenState extends State<CounterScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // boton de restar
-          FloatingActionButton(
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.minimize, color: Colors.white,),
-            onPressed: () {
-               clicks--;
-               setState(() {});
-              }
-            ),
-
-            // boton de resetear
-            FloatingActionButton(
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.restore, color: Colors.white,),
-            onPressed: () {
-               clicks = 0;
-               setState(() {});
-              }
-            ),
-
-          // boton de sumar
-          FloatingActionButton(
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.add, color: Colors.white,),
-            onPressed: () {
-               clicks++;
-               setState(() {});
-              }
-            ),
-        ],
+      floatingActionButton: rowButtons(
+        increaseFn: increaseClicks,
+        decreaseFn: decreaseClicks,
+        resetFn: resetClicks,
       ),
+    );
+  }
+}
+
+class rowButtons extends StatelessWidget {
+  final Function increaseFn;
+  final Function decreaseFn;
+  final Function resetFn;
+
+  const rowButtons({
+    super.key, 
+    required this.increaseFn, 
+    required this.decreaseFn, 
+    required this.resetFn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // boton de restar
+        FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.minimize, color: Colors.white,),
+          onPressed: () => decreaseFn()
+          ),
+    
+          // boton de resetear
+          FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.restore, color: Colors.white,),
+          onPressed: () => resetFn()
+          ),
+    
+        // boton de sumar
+        FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.add, color: Colors.white,),
+          onPressed: () => increaseFn()
+          ),
+      ],
     );
   }
 }
