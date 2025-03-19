@@ -1,0 +1,1 @@
+export 'package:practicas_flutter/widgets/card_swiper.dart';

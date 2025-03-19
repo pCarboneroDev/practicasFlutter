@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+
+class AppTheme {
+  static const Color primaryColorLight = Colors.indigo;
+
+  static final ThemeData lightTheme = ThemeData.light().copyWith(
+        primaryColor: primaryColorLight,
+
+        // Appbar Theme
+        appBarTheme: const AppBarTheme(
+          color: primaryColorLight,
+          centerTitle: true,
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
+          actionsIconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(
+            color: Colors.white
+          )
+        ),
+
+        // Text button Theme
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: primaryColorLight)
+        ),
+
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: primaryColorLight,
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: primaryColorLight
+          ),
+        ),
+      );
+}
