@@ -17,8 +17,8 @@ class ListView2Screen extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) => ListTile(
           title: Text(options[index]),
-          leading: Icon(Icons.gamepad, color: AppTheme.iconColorLight),
-          trailing: Icon(Icons.arrow_forward_ios_outlined, color: AppTheme.iconColorLight),
+          leading: Icon(Icons.gamepad, color: AppTheme.primaryColor2),
+          trailing: Icon(Icons.arrow_forward_ios_outlined, color: AppTheme.primaryColor2),
           onTap: () {
             print(options[index]);
           },

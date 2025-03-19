@@ -4,7 +4,7 @@ class ListView1Screen extends StatelessWidget {
 
   final options = const ['Bayonetta', 'TES V: Skyrim', 'TES IV: Oblivion', 'TES III: Morrowind'];
    
-  const ListView1Screen({Key? key}) : super(key: key);
+  const ListView1Screen({super.key});
   
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ class CardScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric( horizontal: 20, vertical: 10),
         children: const [
-          customCardType1(),
+          CustomCardType1(),
           SizedBox(height: 20,),
           CustomCardType2(imageUrl: 'https://static1.srcdn.com/wordpress/wp-content/uploads/2021/10/Elder-Scrolls-What-Was-Tamriel-Like-Before-The-Empire-ESO-settlement-in-the-sunset.jpg',
           description: 'Paisaje de Tamriel'),

@@ -4,7 +4,7 @@ import 'package:practicas_flutter/themes/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
    
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) => 
         ListTile(
-          leading: Icon(AppRoutes.menuOptions[index].icon, color: AppTheme.iconColorLight),
+          leading: Icon(AppRoutes.menuOptions[index].icon, color: AppTheme.primaryColor2),
           title: Text(AppRoutes.menuOptions[index].name),
           onTap: () {
             Navigator.pushNamed(context, AppRoutes.menuOptions[index].route);

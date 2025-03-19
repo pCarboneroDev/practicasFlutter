@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static const Color primaryColorLight = Colors.indigoAccent;
-  static const Color iconColorLight = Colors.indigo;
+  static const Color primaryColor2 = Colors.indigo;
   static final ThemeData lightTheme = ThemeData.light().copyWith(
         primaryColor: primaryColorLight,
 
@@ -31,6 +31,28 @@ class AppTheme {
             foregroundColor: Colors.white,
             backgroundColor: primaryColorLight
           ),
+        ),
+
+
+        inputDecorationTheme: const InputDecorationTheme(
+          floatingLabelStyle: TextStyle(color: primaryColor2),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: primaryColor2,
+            ),
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), topRight: Radius.circular(10))
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: primaryColor2,
+            ),
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), topRight: Radius.circular(10))
+          ),
+
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), topRight: Radius.circular(10))
+          )
         )
       );
 }
