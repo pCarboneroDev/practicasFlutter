@@ -11,7 +11,10 @@ class AppTheme {
           color: primaryColorLight,
           centerTitle: true,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
-          actionsIconTheme: IconThemeData(color: Colors.white)
+          actionsIconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(
+            color: Colors.white
+          )
         ),
 
         // Text button Theme
