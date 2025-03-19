@@ -20,8 +20,8 @@ class CardSwiper extends StatelessWidget {
         itemHeight: size.height * 0.6,
         itemBuilder: (context, index) {
           return FadeInImage(
-            placeholder: AssetImage('assets/loading.gif'), 
-            image: NetworkImage('https://via.placeholder.com/300x400')
+            placeholder: AssetImage('assets/no-image.jpg'), 
+            image: NetworkImage('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')
           );
         },
       ),
