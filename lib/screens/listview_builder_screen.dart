@@ -17,7 +17,6 @@ class _ListviewBuilderScreenState extends State<ListviewBuilderScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     scrollController.addListener(() {
@@ -118,9 +117,7 @@ class _ListviewBuilderScreenState extends State<ListviewBuilderScreen> {
 }
 
 class _LoadingIcon extends StatelessWidget {
-  const _LoadingIcon({
-    super.key,
-  });
+  const _LoadingIcon();
 
   @override
   Widget build(BuildContext context) {
