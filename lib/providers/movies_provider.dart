@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:practicas_flutter/helpers/debouncer.dart';
 import '../models/models.dart';
 
 
@@ -16,6 +19,14 @@ class MoviesProvider extends ChangeNotifier {
 
   int _popularPage = 0;
 
+
+  final debouncer = Debouncer(
+    duration: Duration(milliseconds: 500),
+  );
+
+  final StreamController<List<Movie>> _suggestionStreamController = new StreamController.broadcast();
+  Stream<List<Movie>> get suggestionSream => _suggestionStreamController.stream;
+
   MoviesProvider() {
     print('MoviesProvider inicializado');
 
@@ -24,7 +35,7 @@ class MoviesProvider extends ChangeNotifier {
   }
 
   Future<String> _getJsonData(String endpoint, [int page = 1]) async {
-    var url = Uri.https(_baseUrl, endpoint, 
+    final url = Uri.https(_baseUrl, endpoint, 
       {
         'api_key': _apiKey,
         'language': _language,
@@ -56,18 +67,45 @@ class MoviesProvider extends ChangeNotifier {
   }
 
   Future<List<Cast>> getMovieCast(int movieId) async {
-    //TODO revisar el Map
 
-    print('pidiendo actorees');
+    if (moviesCast.containsKey(movieId)) return moviesCast[movieId]!;
 
     final jsonData = await _getJsonData('3/movie/$movieId/credits');
-    
-    print('JSON recibido: $jsonData');
-    final credits = CreditsResponse.fromJson(jsonData);
 
-    print('credits.cast');
+    final credits = CreditsResponse.fromJson(jsonData);
 
     moviesCast[movieId] = credits.cast;
     return credits.cast;
+  }
+
+
+  Future<List<Movie>> searchMovie(String query) async {
+    final url = Uri.https(_baseUrl, '3/search/movie', 
+      {
+        'api_key': _apiKey,
+        'language': _language,
+        'query': query
+      }
+    );
+
+    final response = await http.get(url);
+    final searchResponse = SearchMovieResponse.fromJson(response.body);
+    return searchResponse.results;
+  }
+
+  void getSuggestionByQuery(String searchTerm){
+    debouncer.value = '';
+    debouncer.onValue = (value) async {
+      final results = await searchMovie(value);
+      _suggestionStreamController.add(results);
+    };
+
+    final timer = Timer.periodic(
+      Duration(milliseconds: 300), (_){
+        debouncer.value = searchTerm;
+      }
+    );
+
+    Future.delayed(Duration(milliseconds: 301)).then((_) => timer.cancel());
   }
 }

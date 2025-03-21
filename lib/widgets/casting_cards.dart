@@ -18,24 +18,30 @@ class CastingCards extends StatelessWidget {
       builder: (context, AsyncSnapshot<List<Cast>> snapshot) {
 
         if (!snapshot.hasData){
-          print('VSIO');
           return Container(
             height: 180,
             child: CircularProgressIndicator(),
           );
         }
-
+  
         final List<Cast> cast = snapshot.data!; 
-        print('cogí datos ${snapshot.data}');
+
+        if (cast.isEmpty){
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+            height: 180,
+            child: Text('No hay información de los actores.'),
+          );
+        }
 
         return Container(
           margin: EdgeInsets.only(bottom: 30),
           width: double.infinity,
           height: 180,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: cast.length,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => _CastCard(actor: cast[index],),
+            itemBuilder: (context, index) => _CastCard(actor: cast[index],), // aquí
           ),
         );
 
