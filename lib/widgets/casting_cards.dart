@@ -1,25 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/models/credits_response.dart';
+import 'package:practicas_flutter/providers/movies_provider.dart';
+import 'package:provider/provider.dart';
 
 class CastingCards extends StatelessWidget {
-  const CastingCards({super.key});
+
+  final int movieId;
+
+  const CastingCards({super.key, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 30),
-      width: double.infinity,
-      height: 180,
-      child: ListView.builder(
-        itemCount: 10,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => _CastCard(),
-      ),
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+
+    return FutureBuilder(
+      future: moviesProvider.getMovieCast(movieId), 
+      builder: (context, AsyncSnapshot<List<Cast>> snapshot) {
+
+        if (!snapshot.hasData){
+          print('VSIO');
+          return Container(
+            height: 180,
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final List<Cast> cast = snapshot.data!; 
+        print('cogí datos ${snapshot.data}');
+
+        return Container(
+          margin: EdgeInsets.only(bottom: 30),
+          width: double.infinity,
+          height: 180,
+          child: ListView.builder(
+            itemCount: 10,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) => _CastCard(actor: cast[index],),
+          ),
+        );
+
+      }
     );
   }
 }
 
 
 class _CastCard extends StatelessWidget {
+
+  final Cast actor;
+
+  const _CastCard({required this.actor});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +63,7 @@ class _CastCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: FadeInImage(
               placeholder: AssetImage('assets/no-image.jpg'),
-              image: NetworkImage('https://post-press.com/wp-content/uploads/250x300-250x300.gif'),
+              image: NetworkImage(actor.actorPicture),
               height: 135,
               width: 100,
               fit: BoxFit.cover,
@@ -42,7 +72,7 @@ class _CastCard extends StatelessWidget {
 
           SizedBox(height: 5,),
 
-          Text('Actor.name ads as sf asf ', maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,)
+          Text(actor.name, maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,)
         ],
       ),
     );
