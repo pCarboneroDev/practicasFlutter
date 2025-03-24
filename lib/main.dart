@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/pages/home_page.dart';
 import 'package:practicas_flutter/pages/map_page.dart';
+import 'package:practicas_flutter/providers/scan_list_provider.dart';
 import 'package:practicas_flutter/providers/ui_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => new UiProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => new ScanListProvider(),
         )
       ],
 
@@ -28,7 +32,7 @@ class MyApp extends StatelessWidget {
           'maps': (context) => MapPage()
         },
         theme: ThemeData(
-          primaryColor: Colors.red,
+          primaryColor: Colors.deepPurple,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: Colors.deepPurple,
             foregroundColor: Colors.white

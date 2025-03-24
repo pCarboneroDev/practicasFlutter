@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/pages/direcciones_page.dart';
 import 'package:practicas_flutter/pages/maps_page.dart';
+import 'package:practicas_flutter/providers/scan_list_provider.dart';
 import 'package:practicas_flutter/providers/ui_provider.dart';
 import 'package:practicas_flutter/widgets/custom_navigatorBar.dart';
 import 'package:practicas_flutter/widgets/scan_button.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              
+              Provider.of<ScanListProvider>(context, listen: false).borrarTodos();
             }, 
             icon: Icon(Icons.delete_forever, color: Colors.white,)
           )
@@ -34,7 +35,6 @@ class HomePage extends StatelessWidget {
 
 
 class _HomePageBody extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     // obtener selectedMenuOpt
@@ -42,11 +42,17 @@ class _HomePageBody extends StatelessWidget {
     
     final currentIndex = uiProvider.selectedMenuOpc;
 
-    switch(currentIndex){
-      case 0:
-        return MapsPage();
+    final scanListProvider = Provider.of<ScanListProvider>(context, listen: false);
 
+
+
+    switch(currentIndex){
+      
+      case 0:
+        scanListProvider.cargarScansPorTipo('geo');
+        return MapsPage();
       case 1:
+        scanListProvider.cargarScansPorTipo('http');
         return DireccionesPage();
 
       default:
