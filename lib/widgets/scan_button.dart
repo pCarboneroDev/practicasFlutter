@@ -12,7 +12,7 @@ class ScanButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () async {
 
-       /* String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
+        String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
                   context,
                   barcodeAppBar: const BarcodeAppBar(
                     appBarTitle: 'Test',
@@ -24,8 +24,8 @@ class ScanButton extends StatelessWidget {
                   delayMillis: 500,
                   cameraFace: CameraFace.back,
                   scanFormat: ScanFormat.ONLY_QR_CODE,
-                );*/
-        final String? barcodeScanRes = 'https://pub.dev';
+                );
+        //final String? barcodeScanRes = 'https://pub.dev';
         //final String? barcodeScanRes = 'geo:37.370806,-5.972405';
 
         final scanListProvider = Provider.of<ScanListProvider>(context, listen: false);
