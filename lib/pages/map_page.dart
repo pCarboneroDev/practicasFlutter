@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:practicas_flutter/models/scan_model.dart';
 
-import '../providers/scan_list_provider.dart';
+
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -9,11 +9,14 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final scanListProvider = Provider.of<ScanListProvider>(context);
+    final ScanModel scan = ModalRoute.of(context)!.settings.arguments as ScanModel;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Mapa'),
+      ),
       body: Center(
-        child: Text('Map Page'),
+        child: Text(scan.valor),
       ),
     );
   }

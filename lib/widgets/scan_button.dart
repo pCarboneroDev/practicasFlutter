@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/providers/scan_list_provider.dart';
+import 'package:practicas_flutter/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
@@ -11,7 +12,7 @@ class ScanButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () async {
 
-        String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
+       /* String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
                   context,
                   barcodeAppBar: const BarcodeAppBar(
                     appBarTitle: 'Test',
@@ -23,12 +24,14 @@ class ScanButton extends StatelessWidget {
                   delayMillis: 500,
                   cameraFace: CameraFace.back,
                   scanFormat: ScanFormat.ONLY_QR_CODE,
-                );
-        //final String? barcodeScanRes = 'geo:15.34,16.54';
+                );*/
+        final String? barcodeScanRes = 'https://pub.dev';
+        //final String? barcodeScanRes = 'geo:37.370806,-5.972405';
 
         final scanListProvider = Provider.of<ScanListProvider>(context, listen: false);
         if (barcodeScanRes != '-1'){
-          scanListProvider.nuevoScan(barcodeScanRes!);
+          final nuevoScan = await scanListProvider.nuevoScan(barcodeScanRes!);
+          goToUrl(context, nuevoScan);
         }
       },
       child: Icon(Icons.filter_center_focus),
