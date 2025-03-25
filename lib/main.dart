@@ -17,6 +17,24 @@ class MyApp extends StatelessWidget {
         'login': (_) => LoginScreen(),
         'home': (_) => HomeScreen()
       },
+      theme: ThemeData.light().copyWith(
+
+        scaffoldBackgroundColor: const Color.fromARGB(255, 206, 206, 206),
+
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          color: Colors.indigo,
+          centerTitle: true,
+          foregroundColor: Colors.white
+        ),
+
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.indigo,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: CircleBorder()
+        )
+      ),
     );
   }
 }
