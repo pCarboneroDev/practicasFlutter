@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/services/services.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/screens.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const AppState());
+
+class AppState extends StatelessWidget {
+  const AppState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductService(),)
+      ],
+      child: MyApp(),
+    );
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,7 +31,8 @@ class MyApp extends StatelessWidget {
       initialRoute: 'login',
       routes: {
         'login': (_) => LoginScreen(),
-        'home': (_) => HomeScreen()
+        'home': (_) => HomeScreen(),
+        'product': (_) => ProductScreen()
       },
       theme: ThemeData.light().copyWith(
 

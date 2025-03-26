@@ -1,0 +1,1 @@
+export 'package:practicas_flutter/models/product.dart';
