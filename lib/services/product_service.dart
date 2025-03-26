@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/models/models.dart';
@@ -10,6 +11,7 @@ class ProductService extends ChangeNotifier {
   late Product selectedProduct;
   bool isLoading = true;
   bool isSaving = false;
+  File? newPictureFile;
 
   ProductService() {
     this.loadProducts();
@@ -44,7 +46,7 @@ class ProductService extends ChangeNotifier {
     notifyListeners();
 
     if(p.id == null){
-
+      createProduct(p);
     }
     else {
       updateProduct(p);
@@ -73,5 +75,52 @@ class ProductService extends ChangeNotifier {
     notifyListeners();
 
     return p.id!;
+  }
+
+
+    Future<String> createProduct(Product p) async {
+    final url = Uri.https(_baseUrl, 'products.json');
+    final resp = await http.post(url, body: p.toJson());
+    final decodeData = json.decode(resp.body);
+
+    p.id = decodeData['name'];
+    products.add(p);
+
+    notifyListeners();
+
+    return p.id!;
+  }
+
+
+  void updateSelectedImage(String path){
+    selectedProduct.picture = path;
+    newPictureFile = File.fromUri(Uri(path: path));
+    notifyListeners();
+  }
+
+  Future<String?> uploadImage() async {
+    if (newPictureFile == null) return null;
+
+    isSaving = true;
+    notifyListeners();
+
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/dztro4oul/image/upload?upload_preset=r4m37kab');
+    final imageUploadRequest = http.MultipartRequest('POST', url);
+    final file = await http.MultipartFile.fromPath('file', newPictureFile!.path);
+    imageUploadRequest.files.add(file);
+
+    final streamResponse = await imageUploadRequest.send();
+    final resp = await http.Response.fromStream(streamResponse);
+
+    if (resp.statusCode != 200 && resp.statusCode != 201){
+      print('Algo salio mal :(');
+      print(resp.body);
+      return null;
+    }
+    
+    newPictureFile = null;
+    final decodedData = json.decode(resp.body);
+
+    return decodedData['secure_url'];
   }
 }

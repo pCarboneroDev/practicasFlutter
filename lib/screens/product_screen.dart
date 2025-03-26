@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:practicas_flutter/providers/product_form_provider.dart';
 import 'package:practicas_flutter/services/services.dart';
 import 'package:practicas_flutter/ui/input_decorations.dart';
@@ -60,8 +61,19 @@ class _ProductScreenBody extends StatelessWidget {
                   top: 60,
                   right: 20,
                   child: IconButton(
-                    onPressed: () {
-                      // acceso a la camara
+                    onPressed: () async {
+                      final picker = new ImagePicker();
+                      final XFile? pickedFile = await picker.pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 100
+                      );
+
+                      if (pickedFile == null) {
+                        return;
+                      }
+
+                      print('Tenemos imagen ${pickedFile.path}');
+                      productService.updateSelectedImage(pickedFile.path);
                     }, 
                     icon: Icon(Icons.camera_alt_outlined, size: 40, color: Colors.white)
                   )
@@ -77,12 +89,23 @@ class _ProductScreenBody extends StatelessWidget {
       ),
     
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed: productService.isSaving 
+        ? null
+        : () async {
           if (!productForm.isValidForm()) return;
+
+
+          final String? imageUrl = await productService.uploadImage();
+
+          if(imageUrl != null){
+            productForm.product.picture = imageUrl;
+          }
 
           await productService.saveOrCreateProduct(productForm.product);
         },
-        child: Icon(Icons.save_outlined),
+        child: productService.isSaving 
+        ? CircularProgressIndicator.adaptive()
+        : Icon(Icons.save_outlined),
       ),
     );
   }
