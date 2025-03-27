@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5041904840",
+    "project_id": "flutter-notificaciones-caa84",
+    "storage_bucket": "flutter-notificaciones-caa84.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5041904840:android:e075394604559c519a99fd",
+        "android_client_info": {
+          "package_name": "com.pablocarbonero.practicas_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWc1Mwg1KFC8Dgd3q2cJU-mTu04u6ZVW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
