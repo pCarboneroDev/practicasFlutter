@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/providers/login_form_provider.dart';
-import 'package:practicas_flutter/services/auth_service.dart';
-import 'package:practicas_flutter/services/notifications_service.dart';
+import 'package:practicas_flutter/services/services.dart';
 import 'package:practicas_flutter/ui/input_decorations.dart';
 import 'package:practicas_flutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
    
-  const LoginScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 10),
-                    Text('Login', style: Theme.of(context).textTheme.headlineMedium),
+                    Text('Crear cuenta', style: Theme.of(context).textTheme.headlineMedium),
                     SizedBox(height: 30),
 
                     ChangeNotifierProvider(
@@ -37,8 +36,8 @@ class LoginScreen extends StatelessWidget {
 
               SizedBox(height: 50,),
               TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, 'register'), 
-                child: Text('Crear una nueva cuenta', style: TextStyle(fontWeight: FontWeight.bold),)
+                onPressed: () => Navigator.pushReplacementNamed(context, 'login'), 
+                child: Text('¿Ya tienes una cuenta?', style: TextStyle(fontWeight: FontWeight.bold),)
               ),
               SizedBox(height: 50,),
 
@@ -128,14 +127,12 @@ class _LoginForm extends StatelessWidget {
 
                 if (!loginForm.isValidForm()) return;
 
-                final String? errorMsg = await authService.login(loginForm.email, loginForm.password);
+                final String? errorMsg = await authService.createUser(loginForm.email, loginForm.password);
 
-                if (errorMsg == null ){
+                if (errorMsg == null )
                   Navigator.pushReplacementNamed(context, 'home');
-                }
-                else{
-                  NotificationsService.showSnackbar(errorMsg);
-                }
+                else
+                  print(errorMsg);
               },
             )
           ],
