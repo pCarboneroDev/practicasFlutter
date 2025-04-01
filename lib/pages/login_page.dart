@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/services/auth_service.dart';
 import 'package:practicas_flutter/widgets/custom_elevated_button.dart';
 import 'package:practicas_flutter/widgets/custom_input.dart';
 import 'package:practicas_flutter/widgets/labels.dart';
 import 'package:practicas_flutter/widgets/logo.dart';
+import 'package:provider/provider.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -75,6 +77,8 @@ class __FormState extends State<_Form> {
           CustomElevatedButton(text: 'Ingresar', onPressed: () {
             print(emailCtrl.text);
             print(passwordCtrl.text);
+            final authService = Provider.of<AuthService>(context, listen: false);
+            authService.login(emailCtrl.text, passwordCtrl.text);
           })
         ],
       ),
