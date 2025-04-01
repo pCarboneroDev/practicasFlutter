@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/helpers/mostrar_alerta.dart';
 import 'package:practicas_flutter/services/auth_service.dart';
 import 'package:practicas_flutter/widgets/custom_elevated_button.dart';
 import 'package:practicas_flutter/widgets/custom_input.dart';
@@ -52,6 +53,8 @@ class __FormState extends State<_Form> {
   
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -74,12 +77,21 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
 
-          CustomElevatedButton(text: 'Ingresar', onPressed: () {
-            print(emailCtrl.text);
-            print(passwordCtrl.text);
-            final authService = Provider.of<AuthService>(context, listen: false);
-            authService.login(emailCtrl.text, passwordCtrl.text);
-          })
+          CustomElevatedButton(
+            text: 'Ingresar', 
+            onPressed: authService.autenticando ? null
+            : () async { 
+              FocusScope.of(context).unfocus();
+              final loginOk = await authService.login(emailCtrl.text.trim(), passwordCtrl.text.trim());
+
+              if (loginOk){
+                Navigator.pushReplacementNamed(context, 'usuarios');
+              }
+              else{
+                mostrarALerta(context, 'Error', 'Contraseña o Correo incorrectos');
+              }
+            } 
+          )
         ],
       ),
     );

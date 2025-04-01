@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/helpers/mostrar_alerta.dart';
+import 'package:practicas_flutter/services/auth_service.dart';
 import 'package:practicas_flutter/widgets/custom_elevated_button.dart';
 import 'package:practicas_flutter/widgets/custom_input.dart';
 import 'package:practicas_flutter/widgets/labels.dart';
 import 'package:practicas_flutter/widgets/logo.dart';
+import 'package:provider/provider.dart';
 
 
 class RegisterPage extends StatelessWidget {
@@ -51,6 +54,8 @@ class __FormState extends State<_Form> {
   
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -80,11 +85,21 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
 
-          CustomElevatedButton(text: 'Ingresar', onPressed: () {
-            print(nameCtrl.text);
-            print(emailCtrl.text);
-            print(passwordCtrl.text);
-          })
+          CustomElevatedButton(text: 'Registrarse', 
+          onPressed: authService.autenticando ? null
+            : () async { 
+              FocusScope.of(context).unfocus();
+              final registerOk = await authService.register(nameCtrl.text.trim(), emailCtrl.text.trim(), passwordCtrl.text.trim());
+
+              if (registerOk){
+                //todo conectar socket server
+                Navigator.pushReplacementNamed(context, 'usuarios');
+              }
+              else{
+                mostrarALerta(context, 'Registro incorrecto', 'Datos Incorrectos');
+              }
+            } 
+          )
         ],
       ),
     );
