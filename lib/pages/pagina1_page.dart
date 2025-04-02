@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/models/usuario.dart';
+import 'package:practicas_flutter/services/usuario_service.dart';
 
 
 class Pagina1Page extends StatelessWidget {
@@ -7,10 +9,25 @@ class Pagina1Page extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pagina 1'),
+        title: StreamBuilder(
+          stream: usuarioService.usuarioStream, 
+          builder: (context, snapshot) {
+            return snapshot.hasData ? Text(usuarioService.usuario.nombre) : Text('Pagina2');
+          },
+        ),
         centerTitle: true,
       ),
-      body: InformacionUsuario(),
+      body: StreamBuilder(
+        stream: usuarioService.usuarioStream, 
+        builder: (context, AsyncSnapshot<Usuario> snapshot) {
+          if (snapshot.hasData){
+            return InformacionUsuario(usuario: usuarioService.usuario); 
+          }
+          else{
+            return Center(child: Text('No hay información del usuario'));
+          }
+        },
+      ),
      floatingActionButton: FloatingActionButton(
       onPressed: () => Navigator.pushNamed(context, 'pagina2'),
       child: Icon(Icons.accessibility_new),
@@ -20,8 +37,9 @@ class Pagina1Page extends StatelessWidget {
 }
 
 class InformacionUsuario extends StatelessWidget {
+  final Usuario usuario;
   const InformacionUsuario({
-    super.key,
+    super.key, required this.usuario,
   });
 
   @override
@@ -39,8 +57,8 @@ class InformacionUsuario extends StatelessWidget {
 
           Divider(),
 
-          ListTile(title: Text('Nombre: ')),
-          ListTile(title: Text('Edad: ')),
+          ListTile(title: Text('Nombre: ${usuario.nombre}')),
+          ListTile(title: Text('Edad: ${usuario.edad}')),
 
           Text('Profesiones', style: TextStyle(
             fontSize: 20, fontWeight: FontWeight.bold
