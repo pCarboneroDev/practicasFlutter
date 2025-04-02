@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practicas_flutter/routes/routes.dart';
 import 'package:practicas_flutter/services/auth_service.dart';
+import 'package:practicas_flutter/services/chat_service.dart';
+import 'package:practicas_flutter/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(const MyApp());
@@ -14,6 +16,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthService()
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SocketService()
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatService()
         ),
       ],
 

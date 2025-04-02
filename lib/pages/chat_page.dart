@@ -2,7 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:practicas_flutter/models/mensajes_response.dart';
+import 'package:practicas_flutter/services/auth_service.dart';
+import 'package:practicas_flutter/services/chat_service.dart';
+import 'package:practicas_flutter/services/socket_service.dart';
 import 'package:practicas_flutter/widgets/chat_message.dart';
+import 'package:provider/provider.dart';
 
 
 class ChatPage extends StatefulWidget {
@@ -16,14 +21,64 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 final _textController = TextEditingController();
 final _focusNode = FocusNode();
 
+late ChatService chatService;
+late SocketService socketService;
+late AuthService authService;
+
 List<ChatMessage> _messages = [
  
 ];
 
 bool _estaEscribiendo = false;
 
+@override
+  void initState() {
+    super.initState();
+
+    chatService = Provider.of<ChatService>(context, listen: false);
+    socketService = Provider.of<SocketService>(context, listen: false);
+    authService = Provider.of<AuthService>(context, listen: false);
+
+    this.socketService.socket.on('mensaje-personal', (data)=>_escucharMensaje(data));
+
+    _cargarHistorial(chatService.usuarioPara.uid);
+  }
+
+  void _cargarHistorial(String usuarioId) async {
+    List<Mensaje> chat = await chatService.getChat(usuarioId);
+
+    final history = chat.map((m) => new ChatMessage(
+      texto: m.mensaje, 
+      uid: m.de, 
+      animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 0))..forward()
+    ));
+
+    setState(() {
+      _messages.insertAll(0, history);
+    });
+  }
+
+  void _escucharMensaje(dynamic payload){
+    print(payload);
+
+    ChatMessage msg = ChatMessage(
+      texto: payload['mensaje'], 
+      uid: payload['de'], 
+      animationController: AnimationController(vsync: this,
+      duration: Duration(milliseconds: 300))
+    );
+
+    setState(() {
+      _messages.insert(0, msg);
+
+      msg.animationController.forward();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final usuario = chatService.usuarioPara;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -34,13 +89,13 @@ bool _estaEscribiendo = false;
             Container(
               padding: EdgeInsets.only(right: 10),
               child: CircleAvatar(
-                child: Text('Te', style: TextStyle(fontSize: 15)),
+                child: Text(usuario.nombre.substring(0,2), style: TextStyle(fontSize: 15)),
                 backgroundColor: Colors.blue[100],
                 maxRadius: 19,
               ),
             ),
 
-            Text('Sara Ruiz', style: TextStyle(color: Colors.black87, fontSize: 15),)
+            Text(usuario.nombre, style: TextStyle(color: Colors.black87, fontSize: 15),)
 
           ],
         ),
@@ -141,7 +196,7 @@ bool _estaEscribiendo = false;
 
     final newMessage = new ChatMessage(
       texto: texto, 
-      uid: '123',
+      uid: authService.usuario.uid,
       animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 400)),
     );
 
@@ -151,6 +206,12 @@ bool _estaEscribiendo = false;
 
     setState(() {
       _estaEscribiendo = false;
+    });
+
+    socketService.emit('mensaje-personal', {
+      'de': authService.usuario.uid,
+      'para': chatService.usuarioPara.uid,
+      'mensaje': texto
     });
   }
 
