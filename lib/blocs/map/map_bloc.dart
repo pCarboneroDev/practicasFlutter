@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:practicas_flutter/blocs/blocs.dart';
+import 'package:practicas_flutter/models/models.dart';
 
 part 'map_event.dart';
 part 'map_state.dart';
@@ -10,8 +13,10 @@ part 'map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
 
   final LocationBloc locationBloc;
-
   GoogleMapController? _mapController;
+  LatLng? mapCenter;
+
+  StreamSubscription<LocationState>? locationStateSub;
 
   MapBloc({required this.locationBloc}) : super(MapState()) {
     on<OnMapInitializedEvent>(_onInitMap);
@@ -19,8 +24,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStopFollowingUserEvent>((event, emit)  => emit(state.copyWith(followUser: false)));
     on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
     on<OnToggleUserRoute>((event, emit) => emit(state.copyWith(showMyRoute: !state.showMyRoute)));
+    on<DisplayPolylinesEvent>((event, emit) => emit(state.copyWith(polylines: event.polylines)));
 
-    locationBloc.stream.listen((locationState) {
+    locationStateSub = locationBloc.stream.listen((locationState) {
 
       if(locationState.lastKnownLocation != null){
         add(UpdateUserPolylineEvent(locationState.locationHistory));
@@ -59,8 +65,30 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(polylines: currentPolylines));
   }
 
+  Future drawRoutePolyline(RouteDestination destination) async {
+    final myRoute = Polyline(
+      polylineId: const PolylineId('route'),
+      color: Colors.deepPurpleAccent,
+      points: destination.points,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap
+    );
+
+    final currentPolylines = Map<String, Polyline>.from(state.polylines);
+    currentPolylines['route'] = myRoute;
+
+    add(DisplayPolylinesEvent(currentPolylines));
+  }
+
   void moveCamera(LatLng newLocation){
     final cameraUpdate = CameraUpdate.newLatLng(newLocation);
     _mapController?.animateCamera(cameraUpdate);
+  }
+
+
+  @override
+  Future<void> close() {
+    locationStateSub?.cancel();
+    return super.close();
   }
 }

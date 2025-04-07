@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:practicas_flutter/blocs/blocs.dart';
 import 'package:practicas_flutter/views/views.dart';
-import 'package:practicas_flutter/widgets/btn_follow_user.dart';
-import 'package:practicas_flutter/widgets/btn_follow_user_route.dart';
 import 'package:practicas_flutter/widgets/widgets.dart';
 
 
@@ -55,6 +53,8 @@ class _MapScreenState extends State<MapScreen> {
                              polylines: mapState.polylines.values.toSet()),
                         
                            // TODO: botones...
+                           const Searchbar(),
+                           const ManualMarker()
                          ],
                         ),
                       );
