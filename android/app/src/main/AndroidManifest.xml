@@ -9,6 +9,8 @@
         android:label="practicas_flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBIph3vHrA0nCUlAs0VwPKbTxNHRsgiqDc"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
