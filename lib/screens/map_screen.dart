@@ -49,8 +49,11 @@ class _MapScreenState extends State<MapScreen> {
                return SingleChildScrollView(
                         child: Stack(
                          children: [
-                           MapView(initialLocation: state.lastKnownLocation!,
-                             polylines: mapState.polylines.values.toSet()),
+                           MapView(
+                            initialLocation: state.lastKnownLocation!,
+                             polylines: mapState.polylines.values.toSet(),
+                             markers: mapState.markers.values.toSet(),
+                            ),
                         
                            // TODO: botones...
                            const Searchbar(),

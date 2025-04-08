@@ -37,6 +37,7 @@ class MapsApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
       home: LoadingScreen(),
+      //home: TestMarkerScreen(),
     );
   }
 }

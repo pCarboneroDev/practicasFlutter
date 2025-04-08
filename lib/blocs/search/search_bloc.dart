@@ -16,11 +16,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }) : super(const SearchState()) {
     on<OnActivateManualMArkerEvent>((event, emit) => emit(state.copyWith(displayManualMarker: true)));
     on<OnDeactivateManualMarkerEvent>((event, emit) => emit(state.copyWith(displayManualMarker: false)));
+
+    on<OnNewPlacesFoundEvent>((event, emit) => emit(state.copyWith(places: event.places)));
+
+    //on<AddToHistoryEvent>((event, emit) => _addToHistory); 
+    on<AddToHistoryEvent>((event, emit) => emit(state.copyWith(history: [event.place, ...state.history]))); 
+
   }
+
+
+  /*void _addToHistory(AddToHistoryEvent event, Emitter emit){
+    final list = [event.place, ...state.history];
+
+    emit(state.copyWith(history: list)); 
+  }*/
 
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
     final resp = await trafficService.getCoorsStartToEnd(start, end);
+
+    //info del destino
+    final endPlace = await trafficService.getInformationByCoors(end);
 
     final distance = resp.routes[0].distance;
     final duration = resp.routes[0].duration;
@@ -33,7 +49,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     return RouteDestination(
       points: LatLngList, 
       duration: duration, 
-      distance: distance
+      distance: distance,
+      endPlace: endPlace
     );
+  }
+
+
+  Future getPlacesByQuery(LatLng proximity, String query) async {
+
+    final resp = await trafficService.getResultsByQuery(proximity, query);
+
+    add(OnNewPlacesFoundEvent(resp));
+
   }
 }
